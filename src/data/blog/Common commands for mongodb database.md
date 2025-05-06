@@ -1,6 +1,6 @@
 ---
 author: Simon Smale
-pubDatetime: 2024-01-03T20:40:08Z
+pubDatetime: 2024-04-03T20:40:08Z
 title: MongDB的使用和常见指令
 featured: true
 draft: false

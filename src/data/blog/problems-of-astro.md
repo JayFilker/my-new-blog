@@ -1,6 +1,6 @@
 ---
 author: Sat Naing
-pubDatetime: 2022-09-20T04:58:53Z
+pubDatetime: 2024-01-13T04:58:53Z
 title: astro-paper框架中的一些使用注意事项
 slug: astro-paper框架中的一些使用注意事项
 featured: true
@@ -11,29 +11,59 @@ tags:
 description:
   Some usage notes in the astro-paper framework.
 ---
-1. astro-paper框架不要用下载，直接克隆，下载的话就是一个简陋的页面，使用克隆才能获得成品，另外使用框架不需要先下载前置的astro，直接用就行。
+
+## AstroPaper 框架使用指南
+
+1. 框架安装与设置
+
+正确获取完整项目
+
+AstroPaper 框架不应该通过npm下载的方式获取，这样只会得到一个简陋的页面版本。正确的方法是通过 Git 克隆完整仓库：
 ```html
 git clone https://github.com/satnaing/astro-paper.git my-blog
 cd my-blog
 npm i
+#使用框架不需要预先安装 Astro，克隆后直接使用即可。
 ```
-2. 在astro-paper框架的背景下，想要实现前端状态管理，需要的不再是Atom，而是persistentAtom，以下是具体的实现方法示例：
+
+
+2. 前端状态管理
+
+在 AstroPaper 框架中实现前端状态管理时，推荐使用 persistentAtom 而非普通的 Atom，这样可以在页面刷新后保持状态。
+
+实现步骤:
+
 
 ```html
-//首先在终端运行以下载必须的依赖
+安装必要依赖：
 npm install nanostores @nanostores/persistent
-//在类似jotai的util文件中：
+创建持久化状态存储（类似 Jotai atom 的实现）：
+// store/content.ts
 import { persistentAtom } from "@nanostores/persistent";
-// 创建一个类似 Jotai atom 的存储
+
+// 创建一个持久化的存储
 export const contentStore = persistentAtom("user:loggedIn", false, {
 encode: JSON.stringify,
 decode: JSON.parse,
 });
-//在需要的ts组件中：
+在 TypeScript 组件中使用：
 import { contentStore } from '@/store/content';
-contentStore.set(true)
+
+// 设置状态
+contentStore.set(true);
+
+// 使用状态
+const isLoggedIn = contentStore.get();
+
+// 监听状态变化
+contentStore.subscribe(value => {
+console.log("登录状态变更:", value);
+});
 ```
-3. 在astro文件中如何获取表单数据，我的获取方式如下：
+
+3. 在 Astro 文件中获取表单数据
+
+Astro 文件中获取表单数据的方法示例：
 ```html
 <form id="myForm">
   <input type="text" name="username" placeholder="用户名" />
@@ -50,32 +80,52 @@ contentStore.set(true)
     // 获取特定表单项
     const username = formData.get('username');
     const email = formData.get('email');
-      
+    
+    console.log("表单数据:", { username, email });
+    
+    // 可以继续处理数据，如发送到服务器
+    // fetch('/api/submit', {
+    //   method: 'POST',
+    //   body: formData
+    // })
   });
 </script>
 ```
-4. 很重要的一点，在使用最新的astro-paper框架时，配置中可能有一些实际不支持，但却默认使用了的选项，一般出现这种情况在你npm run dev运行时会报错：
+
+4. 常见配置问题与解决方案
+
+使用最新版 AstroPaper 框架时，可能会遇到配置兼容性问题。当运行 npm run dev 时，可能出现以下错误：
 ```html
 [config] Astro found issue(s) with your configuration:
 
 ! experimental: Invalid or outdated experimental feature.
-  Check for incorrect spelling or outdated Astro version.
-  See https://docs.astro.build/en/reference/experimental-flags/ for a list of all current experiments.
+Check for incorrect spelling or outdated Astro version.
+See https://docs.astro.build/en/reference/experimental-flags/ for a list of all current experiments.
 
 19:14:52 [ERROR] Continuing with previous valid configuration
 ```
-这时候就需要找到astro.config.ts文件，然后一个一个去测试，通过注释的方式测试各个配置对项目的影响
-目前，会导致报错的配置有如下几个：
+
+解决方法
+
+需要修改 astro.config.ts 文件，删除或注释掉不支持的配置项。目前已知的问题配置包括：
 ```html
-  experimental: {
-    svg: true,//这个svg实际上不支持，需要注释或删除
-    responsiveImages: true,
-    preserveScriptOrder: true,
-  },
+// 需要删除或注释的配置项：
+experimental: {
+svg: true,  // 不支持，需注释或删除
+responsiveImages: true,
+preserveScriptOrder: true,
+},
+
 image: {
-// Used for all Markdown images; not configurable per-image
-// Used for all `<Image />` and `<Picture />` components unless overridden with a prop
+// 以下整个 image 配置块不支持
 // experimentalLayout: "responsive",
 },
-//上面这个image全部都不支持
 ```
+
+通过逐一注释这些配置项进行测试，确定哪些导致了错误，然后删除或替换为当前版本支持的选项。
+
+4. 动态数据加载与静态部署
+
+如前文所述，AstroPaper 作为静态框架，在数据加载方面有其特定的工作方式。使用客户端组件（client:only="react"）可以实现动态数据加载，确保内容实时更新，而不受静态生成的限制。
+
+通过遵循以上指南，可以充分利用 AstroPaper 框架的强大功能，同时避免常见的配置和使用问题。
