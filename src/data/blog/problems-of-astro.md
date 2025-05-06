@@ -8,7 +8,8 @@ draft: false
 tags:
   - configuration
   - docs
-description: Immediate and enhanced display in the astro-paper framework.
+description:
+  Some usage notes in the astro-paper framework.
 ---
 1. astro-paper框架不要用下载，直接克隆，下载的话就是一个简陋的页面，使用克隆才能获得成品，另外使用框架不需要先下载前置的astro，直接用就行。
 ```html

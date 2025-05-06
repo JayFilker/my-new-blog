@@ -2,7 +2,7 @@
 author: Sat Naing
 pubDatetime: 2022-09-25T15:20:35Z
 title: 标记一下一些好用的网站
-featured: true
+featured: false
 draft: false
 tags:
   - color-schemes

@@ -8,7 +8,7 @@ tags:
   - docs
   - FAQ
 canonicalURL: https://smale.codes/posts/setting-dates-via-git-hooks/
-description: Common commands for mongodb database
+description: MongoDB usage and common instructions.
 ---
 ## MongDB数据库的使用(nodejs背景)
 1.首先下载MongDB
