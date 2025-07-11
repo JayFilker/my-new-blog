@@ -67,7 +67,6 @@ export default function Comment({ articleTitle }: CommentProps) {
             });
             
             const result = await response.json();
-            
             if (result.success) {
                 setMessage("评论已提交，审核后将显示");
                 setNewComment({...newComment, author: "", text: ""});
