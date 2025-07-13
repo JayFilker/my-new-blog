@@ -2,7 +2,7 @@
 author: Sat Naing
 pubDatetime: 2025-07-09T04:58:53Z
 title: 实现react项目-音乐播放器的具体流程
-slug: 基于React + TypeScript + Vite实现音乐播放器
+slug: 音乐播放器
 featured: true
 draft: false
 tags:
